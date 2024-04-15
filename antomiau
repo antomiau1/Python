@@ -1,0 +1,100 @@
+# Precios de la gasolina por litro
+precio_gasolina_93 = float(input("Ingrese el precio por litro de gasolina de 93 octanos: "))
+precio_gasolina_95 = float(input("Ingrese el precio por litro de gasolina de 95 octanos: "))
+precio_gasolina_97 = float(input("Ingrese el precio por litro de gasolina de 97 octanos: "))
+
+# Validar la cantidad de clientes
+cantidad_clientes = int(input("Ingrese la cantidad de clientes a procesar: "))
+while cantidad_clientes <= 0 or cantidad_clientes > 10000:
+    cantidad_clientes = int(input("Ingrese una cantidad válida de clientes (mayor a 0 y menor o igual a 10000): "))
+
+print("Se procesarán", cantidad_clientes, "cliente(s).")
+
+# Variables para el reporte final
+recaudado_total = 0
+litros_vendidos_total = 0
+clientes_sin_descuento = 0
+clientes_93_octanos = 0
+litros_93_octanos = 0
+clientes_97_octanos = 0
+litros_97_octanos = 0
+
+print("\nINICIO DEL PROCESAMIENTO DE DATOS")
+print("=" * 35)
+
+# Procesar cada cliente
+for i in range(cantidad_clientes):
+    # Leer información del cliente
+    rut = input("Rut del cliente: ")
+    tipo_gasolina = int(input("Tipo de gasolina comprada (93, 95 o 97): "))
+    litros_comprados = int(input("Litros comprados: "))
+
+    # Calcular precio sin descuento
+    if tipo_gasolina == 93:
+        precio_sin_descuento = precio_gasolina_93 * litros_comprados
+    elif tipo_gasolina == 95:
+        precio_sin_descuento = precio_gasolina_95 * litros_comprados
+    else:
+        precio_sin_descuento = precio_gasolina_97 * litros_comprados
+
+    # Calcular descuento
+    if litros_comprados <= 10:
+        descuento = 0
+    elif litros_comprados <= 20:
+        if tipo_gasolina == 93:
+            descuento = 5
+        elif tipo_gasolina == 95:
+            descuento = 10
+        else:
+            descuento = 20
+    else:
+        if tipo_gasolina == 93:
+            descuento = 10
+        elif tipo_gasolina == 95:
+            descuento = 20
+        else:
+            descuento = 30
+
+    # Calcular precio total con descuento
+    precio_total_descuento = precio_sin_descuento * (1 - descuento / 100)
+
+    # Actualizar variables para el reporte final
+    recaudado_total += precio_total_descuento
+    litros_vendidos_total += litros_comprados
+    if descuento == 0:
+        clientes_sin_descuento += 1
+    if tipo_gasolina == 93:
+        clientes_93_octanos += 1
+        litros_93_octanos += litros_comprados
+    elif tipo_gasolina == 97:
+        clientes_97_octanos += 1
+        litros_97_octanos += litros_comprados
+
+    # Mostrar información del cliente
+    print("\nRut:", rut)
+    print("Tipo Gasolina:", tipo_gasolina)
+    print("Litros Comprados:", litros_comprados)
+    print("Precio bencina sin descuento:", precio_sin_descuento)
+    print("Porcentaje de descuento:", descuento, "%")
+    print("Total a pagar POST descuento:", precio_total_descuento)
+    print("-" * 50)
+
+print("\nREPORTE FINAL")
+print("=" * 13)
+
+# Imprimir reporte final
+print("Se recaudaron por venta de bencina:", recaudado_total, "pesos.")
+print("Se vendieron", litros_vendidos_total, "litros de bencina.")
+print("Clientes que NO obtuvieron descuento:", clientes_sin_descuento, "cliente(s).")
+
+if clientes_93_octanos > 0:
+    print("{:.1%} de los clientes compraron bencina de 93 octanos.".format(clientes_93_octanos / cantidad_clientes))
+    print("Promedio de litros de bencina de 93 octanos vendidos: {:.2f}.".format(litros_93_octanos / clientes_93_octanos))
+else:
+    print("No se procesaron clientes que compraron bencina de 93 Octanos.")
+
+if clientes_97_octanos > 0:
+    print("{:.1%} de los clientes compraron bencina de 97 octanos.".format(clientes_97_octanos / cantidad_clientes))
+    print("Promedio de litros de bencina de 97 octanos vendidos: {:.2f}.".format(litros_97_octanos / clientes_97_octanos))
+else:
+    print("No se procesaron clientes que compraron bencina de 97 Octanos.")
